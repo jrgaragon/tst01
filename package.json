@@ -1,0 +1,17 @@
+{
+  "name": "tlaloc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "instagram-private-api": "^1.45.3",
+    "mongoose": "^6.3.6",
+    "sharp": "^0.30.6"
+  }
+}
