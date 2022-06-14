@@ -16,7 +16,8 @@ const imageSchema = mongoose.Schema({
   width: Number,
   height: Number,
   thumbnail: Buffer,
-  username: String
+  username: String,
+  owner: String
 });
 
 const Image = mongoose.model("Image", imageSchema);

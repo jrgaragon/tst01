@@ -1,4 +1,5 @@
 const baseService = require("./baseService");
+const Session = require("./sessionService");
 const IG_API = require("instagram-private-api");
 const fs = require("fs");
 
@@ -7,40 +8,37 @@ class InstagramSession extends baseService {
     super();
     this.component = "instagramSession.js";
     this.owner = owner;
-    this.user = "Igloo001209";
-    this.password = "2547y7n704";
+    this.user = "dev_ig_01";
+    this.password = "er!Emg24$ZFj";
+    this.session = new Session(owner);
   }
 
   async existIntagramSession() {
-    return fs.existsSync("session.json");
+    return await this.session.exists(this.user);
   }
 
   async getIntagramSession() {
-    const session = fs.readFileSync("session.json", "utf-8");
+    const session = await this.session.get(this.user);   
     return session;
   }
 
   async setIntagramSession(value) {
     delete value.constants;
-    fs.writeFileSync("session.json", JSON.stringify(value), "utf-8");
+    await this.session.set(this.user, value);    
   }
 
-  async getSession(user) {
+  async getSession() {
     const ig = new IG_API.IgApiClient();
-    ig.state.generateDevice(user);
-
-    ig.request.end$.subscribe(async () => {
-      // const serialized = await ig.state.serialize();
-      // this.setIntagramSession(serialized);
-    });
+    ig.state.generateDevice(this.owner);
 
     if (await this.existIntagramSession()) {
       try {
         await ig.simulate.preLoginFlow();
-        await ig.state.deserialize(this.getIntagramSession());
+        const session = await this.getIntagramSession();       
+        await ig.state.deserialize(session);
         await ig.user.info(ig.state.cookieUserId)
         await ig.account.currentUser();
-      } catch (e) {
+      } catch (e) {        
         console.log(e.message);
         await ig.account.login(this.user, this.password);
         const serialized = await ig.state.serialize();

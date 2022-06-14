@@ -17,9 +17,22 @@ class userService extends baseService {
     return users;
   }
 
-  async getUsers() {
-    const users = await User.find({});
-    return users;
+  async getUsersByPage(page) {
+    let users = await User.find({}).lean();
+    let usersThumb64 = [];
+
+    usersThumb64 = users.map((u) => {
+      let tempUser = {...u};
+      
+      tempUser.thumbnail64 = `data:image/png;base64, ${u.thumbnail.toString(
+        "base64"
+      )}`;
+      delete tempUser.thumbnail;
+
+      return tempUser;
+    });
+
+    return usersThumb64;
   }
 
   async exists(userName) {
@@ -28,10 +41,10 @@ class userService extends baseService {
   }
 
   async crateUser(user) {
-    if (!await this.exists(user.username)) {
+    if (!(await this.exists(user.username))) {
       const userDB = new User(user);
       return userDB.save();
-    }    
+    }
   }
 }
 

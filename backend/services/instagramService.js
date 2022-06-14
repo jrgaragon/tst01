@@ -14,26 +14,20 @@ class instagramService extends baseService {
     this.duplicates = [];
     this.component = "instagramServie.js";
     this.owner = owner;
-    this.session = new InstragramSession();
-    this.userService = new UserService();
+    this.session = new InstragramSession(this.owner);
+    this.userService = new UserService(this.owner);
   }
 
   async getSavedItems() {
-    const ig = await this.session.getSession("dev_ig_01");
+    const ig = await this.session.getSession();
     const feed = ig.feed.saved();
-    const promises = [];   
+    const promises = [];
 
     do {
-      let items = await feed.items();
-      let images = await this.scrapItems(items);
-
-
-
-
-
+      const items = await feed.items();
+      const images = await this.scrapItems(items);
 
       for (const result of images) {
-
         await this.saveUsers(result);
 
         for (const image of result) {
@@ -43,8 +37,6 @@ class instagramService extends baseService {
 
       await Promise.all(promises);
 
-      //await scrapper.save(result);
-
       // if (!scrapper.duplicates.some(d => !d.exists)) {
       //   break;
       // }
@@ -53,15 +45,14 @@ class instagramService extends baseService {
       console.log("Waiting");
       await u.sleep(5000);
       console.log("Waiting Completed");
-    } while (feed.isMoreAvailable());
+    } while (feed.isMoreAvailable() && !this.duplicate);
 
     console.log("DONE");
     return;
   }
 
-
   async saveUsers(images) {
-    for(const img of images) {
+    for (const img of images) {
       await this.userService.crateUser({
         id: u.guid(),
         username: img.username,
@@ -70,13 +61,17 @@ class instagramService extends baseService {
         type: "model",
         password: "master",
         owner: this.owner,
-      });      
+      });
     }
   }
 
   async saveImage(image) {
-    const imagedb = new Image(image);
-    await imagedb.save();
+    if (!(await Image.exists({ pk: image.pk, owner: this.owner }))) {
+      const imagedb = new Image(image);
+      await imagedb.save();
+    } else {
+      this.duplicate = true;
+    }
   }
 
   async scrapItems(items) {
@@ -120,6 +115,7 @@ class instagramService extends baseService {
         image: imageBuffer.data,
         size: imageBuffer.data.length,
         thumbnail: await sharp(imageBuffer.data).resize(180, 290).toBuffer(),
+        owner: this.owner,
       };
 
       images.push({ ...mainItem, ...imagedb });
@@ -140,6 +136,7 @@ class instagramService extends baseService {
       image: imageBuffer.data,
       size: imageBuffer.data.length,
       thumbnail: await sharp(imageBuffer.data).resize(180, 290).toBuffer(),
+      owner: this.owner,
     };
     images.push({ ...mainItem, ...imagedb });
     return images;
