@@ -7,7 +7,6 @@ class userService extends baseService {
   constructor(owner) {
     super();
     this.duplicate = false;
-    this.duplicates = [];
     this.component = "userServivce.js";
     this.owner = owner;
   }

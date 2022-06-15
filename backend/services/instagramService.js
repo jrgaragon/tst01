@@ -5,7 +5,7 @@ const axios = require("axios");
 const utils = require("./utilities");
 const u = utils.getInstance();
 const InstragramSession = require("./instagramSession");
-const UserService = require("./userService");
+const ModelService = require("./modelService");
 
 class instagramService extends baseService {
   constructor(owner) {
@@ -15,7 +15,7 @@ class instagramService extends baseService {
     this.component = "instagramServie.js";
     this.owner = owner;
     this.session = new InstragramSession(this.owner);
-    this.userService = new UserService(this.owner);
+    this.modelService = new ModelService(this.owner);
   }
 
   async getSavedItems() {
@@ -28,7 +28,7 @@ class instagramService extends baseService {
       const images = await this.scrapItems(items);
 
       for (const result of images) {
-        await this.saveUsers(result);
+        await this.saveModel(result);
 
         for (const image of result) {
           promises.push(this.saveImage(image));
@@ -37,11 +37,6 @@ class instagramService extends baseService {
 
       await Promise.all(promises);
 
-      // if (!scrapper.duplicates.some(d => !d.exists)) {
-      //   break;
-      // }
-
-      //scrapper.duplicates = [];
       console.log("Waiting");
       await u.sleep(5000);
       console.log("Waiting Completed");
@@ -51,15 +46,14 @@ class instagramService extends baseService {
     return;
   }
 
-  async saveUsers(images) {
+  async saveModel(images) {
     for (const img of images) {
-      await this.userService.crateUser({
+      await this.modelService.crateModel({
         id: u.guid(),
         username: img.username,
         thumbnail: img.thumbnail,
         publishedCount: 0,
-        type: "model",
-        password: "master",
+        type: "model",        
         owner: this.owner,
       });
     }
