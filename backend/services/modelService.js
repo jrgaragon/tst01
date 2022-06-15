@@ -18,20 +18,21 @@ class modelService extends baseService {
   }
 
   async getModelByPage(page) {
-    let models = await Model.find({}).lean();
+    const pageSize = 20;
+    let models = await Model.find({})
+      .sort({ username: "asc" })
+      .skip(page * pageSize)
+      .limit(pageSize)
+      .lean();
+
     let modelThumb64 = [];
-
+    
     modelThumb64 = models.map((u) => {
-      let tempModel = {...u};
-      
-      tempModel.thumbnail = `data:image/png;base64, ${u.thumbnail.toString(
-        "base64"
-      )}`;
-      //delete tempModel.thumbnail;
-
+      let tempModel = { ...u };
+      tempModel.thumbnail = `data:image/png;base64, ${u.thumbnail.toString("base64")}`;
       return tempModel;
     });
-
+    
     return modelThumb64;
   }
 
