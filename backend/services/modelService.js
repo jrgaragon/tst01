@@ -1,5 +1,6 @@
 const baseService = require("./baseService");
 const Model = require("../models/model");
+const Image = require("../models/image");
 const utils = require("./utilities");
 const u = utils.getInstance();
 
@@ -17,8 +18,7 @@ class modelService extends baseService {
     return users;
   }
 
-  async getModelByPage(page) {
-    const pageSize = 20;
+  async getModelByPage(page, pageSize) {
     let models = await Model.find({})
       .sort({ username: "asc" })
       .skip(page * pageSize)
@@ -26,13 +26,31 @@ class modelService extends baseService {
       .lean();
 
     let modelThumb64 = [];
-    
+
     modelThumb64 = models.map((u) => {
       let tempModel = { ...u };
       tempModel.thumbnail = `data:image/png;base64, ${u.thumbnail.toString("base64")}`;
       return tempModel;
     });
-    
+
+    return modelThumb64;
+  }
+
+  async getImagesByPage({username, page, pageSize }) {
+    let models = await Image.find({username: username, owner: this.owner})
+      .sort({ username: "asc" })
+      .skip(page * pageSize)
+      .limit(pageSize)
+      .lean();
+
+    let modelThumb64 = [];
+
+    modelThumb64 = models.map((u) => {
+      let tempModel = { ...u };
+      tempModel.thumbnail = `data:image/png;base64, ${u.thumbnail.toString("base64")}`;
+      return tempModel;
+    });
+
     return modelThumb64;
   }
 

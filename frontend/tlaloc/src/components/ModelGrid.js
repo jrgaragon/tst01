@@ -6,8 +6,8 @@ const ModelGrid = ({ category }) => {
   const [models, setModels] = useState([]);
 
   useEffect(() => {
-    const url = `http://localhost:3001/instagram/api/site/getmodels`;
-    axios.post(url, { page: 0 }).then((response) => {
+    const url = `http://localhost:3001/instagram/api/model/getmodels`;
+    axios.post(url, { page: 0, pageSize: 20 }).then((response) => {
       console.log(response.data);
       setModels(response.data);
     });

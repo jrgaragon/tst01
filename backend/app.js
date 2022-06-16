@@ -10,6 +10,8 @@ app.use(bodyParser.json({ limit: "50mb" }));
 console.log("******************************************START******************************************");
 
 require("./routes/api/site")(app);
+require("./routes/api/image")(app);
+require("./routes/api/model")(app);
 
 openConnection().then(async (_) => {
   //const instagram = new instagramService('master');

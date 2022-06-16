@@ -1,10 +1,11 @@
 import React from "react";
-//import "./../index.css";
-
+import { Link } from "react-router-dom";
 const ModelGridItem = ({ username, thumbnail }) => {
   return (
     <div className="card-custom">
-      <img src={thumbnail}></img>
+      <Link to={{ pathname: `/${username}` }} state={{ username: username }} key={username}>
+        <img src={thumbnail} alt={username}></img>
+      </Link>
       <p>{username}</p>
     </div>
   );
