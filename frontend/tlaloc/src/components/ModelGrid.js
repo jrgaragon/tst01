@@ -19,7 +19,7 @@ const ModelGrid = ({ category }) => {
         {models.map((model) => (
           <ModelGridItem key={model.id} {...model} />
         ))}
-      </div>
+      </div>     
     </div>
   );
 };

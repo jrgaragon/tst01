@@ -14,6 +14,14 @@ module.exports = (app) => {
     res.json(images);
   });
 
+  app.post("/instagram/api/image/getimage", async (req, res) => {
+    const imageService = new ImageService("master");
+    //console.log(req.body.id)
+    const image = await imageService.getImagesById(req.body.id);
+
+    res.json(image);
+  });
+
   app.post("/instagram/api/image/download", async (req, res) => {
     const instagram = new InstagramService("master");
     await instagram.getSavedItems();

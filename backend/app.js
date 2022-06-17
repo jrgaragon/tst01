@@ -5,6 +5,7 @@ const openConnection = require("./services/dal");
 const cors = require('cors');
 const app = express();
 app.use(cors());
+app.options("*", cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 
 console.log("******************************************START******************************************");

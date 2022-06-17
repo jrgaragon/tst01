@@ -12,8 +12,8 @@ class imageService extends baseService {
     this.owner = owner;
   }
 
-  async getImagesByPage({username, page, pageSize }) {
-    let images = await Image.find({username: username, owner: this.owner})
+  async getImagesByPage({ username, page, pageSize }) {
+    let images = await Image.find({ username: username, owner: this.owner })
       .sort({ username: "asc" })
       .skip(page * pageSize)
       .limit(pageSize)
@@ -28,6 +28,16 @@ class imageService extends baseService {
     });
 
     return imagesThumb64;
+  }
+
+  async getImagesById(id) {
+    let image = await Image.findOne({ id: id, owner: this.owner }).lean();
+
+    delete image.thumbnail;
+    image.image = `data:image/png;base64, ${image.image .toString("base64")}`;
+
+    return image;
+   
   }
 }
 
