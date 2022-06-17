@@ -6,8 +6,7 @@ import axios from "axios";
 
 const Model = () => {
   const [images, setImages] = useState([]);
-  const [showImageViewer, setShowImageViewer] = useState(false);
-  const [selectedImage, setSelectedImage] = useState('');
+  const [showImageViewer, setShowImageViewer] = useState({show: false, selectedImage: ''});  
   const location = useLocation();
   const username = location.state.username;
 
@@ -17,15 +16,15 @@ const Model = () => {
       setImages(response.data);
     });
   }, []);
-  
+
   return (
     <div>
       <div className="card-grid-custom">
         {images.map((image) => (
-          <GalleryGridItem key={image.id} {...image} setShowImageViewer={setShowImageViewer} setSelectedImage={setSelectedImage}/>
+          <GalleryGridItem key={image.id} {...{ ...image, setShowImageViewer }} />
         ))}
       </div>
-      {showImageViewer ? <ImageViewer setShowImageViewer={setShowImageViewer} selectedImage={selectedImage} /> : null}
+      {showImageViewer.show ? <ImageViewer {...{ setShowImageViewer, showImageViewer }} /> : null}
     </div>
   );
 };

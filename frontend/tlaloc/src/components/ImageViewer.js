@@ -3,20 +3,20 @@ import axios from "axios";
 //import { Link } from "react-router-dom";
 import "../index.css";
 
-const ImageViewer = ({ setShowImageViewer, selectedImage }) => {
+const ImageViewer = ({ setShowImageViewer, showImageViewer }) => {
   const [image, setImage] = useState({});
   const onImageShow = (e) => {
-    setShowImageViewer(false);
+    setShowImageViewer({ show: false });
   };
 
   useEffect(() => {
-    console.log(selectedImage);
+    console.log(showImageViewer.selectedImage);
 
     const url = `http://localhost:3001/instagram/api/image/getimage`;
-    axios.post(url, { id: selectedImage }).then((response) => {
+    axios.post(url, { id: showImageViewer.selectedImage }).then((response) => {
       setImage(response.data);
     });
-  }, [selectedImage]);
+  }, [showImageViewer]);
 
   return (
     <div className="overlay">

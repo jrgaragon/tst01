@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ModelGridItem from "./ModelGridItem";
 import axios from "axios";
 
-const ModelGrid = ({ category }) => {
+const ModelGrid = () => {
   const [models, setModels] = useState([]);
 
   useEffect(() => {
