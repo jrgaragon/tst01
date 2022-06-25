@@ -3,13 +3,13 @@ import React from "react";
 
 const GalleryGridItem = ({ id, username, thumbnail, setShowImageViewer }) => {
   const onImageShow = (e) => {
-    setShowImageViewer({ show: true, selectedImage: id });
-    //setSelectedImage(id);
+    setShowImageViewer({ show: true, selectedImage: id });    
   };
+  
   return (
     <div className="card-custom">
       <img src={thumbnail} alt={username} onClick={onImageShow}></img>
-      <p>{id}</p>
+      {/* <p>{id}</p> */}
     </div>
   );
 };

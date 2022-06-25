@@ -14,6 +14,14 @@ module.exports = (app) => {
     res.json(images);
   });
 
+  app.post("/instagram/api/image/getimagepages", async (req, res) => {
+    const imageService = new ImageService("master");
+    console.log({ ...req.body })
+    const pages = await imageService.getPages({ ...req.body });
+
+    res.json({ pages: pages });
+  });
+
   app.post("/instagram/api/image/getimage", async (req, res) => {
     const imageService = new ImageService("master");
     //console.log(req.body.id)

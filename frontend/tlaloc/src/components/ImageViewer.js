@@ -3,7 +3,7 @@ import axios from "axios";
 //import { Link } from "react-router-dom";
 import "../index.css";
 
-const ImageViewer = ({ setShowImageViewer, showImageViewer }) => {
+const ImageViewer = ({ setShowImageViewer, showImageViewer, imageListId }) => {
   const [image, setImage] = useState({});
   const onImageShow = (e) => {
     setShowImageViewer({ show: false });
@@ -18,16 +18,44 @@ const ImageViewer = ({ setShowImageViewer, showImageViewer }) => {
     });
   }, [showImageViewer]);
 
+  //console.log('<<<ImageViewer>>>', imageListId);
+
+  const getCurrentIndex = () => {
+    const currentIndex = imageListId.indexOf(showImageViewer.selectedImage);
+    return currentIndex;
+  }
+  
+  const onNext = (e) => {
+    let currentIndex = getCurrentIndex();
+    currentIndex++;
+
+
+    if(currentIndex < imageListId.length) {      
+      const currentImage = imageListId[currentIndex];
+      setShowImageViewer({ selectedImage: currentImage, show: true });
+    }   
+  }
+
+  const onPrevious = (e) => {
+    let currentIndex = getCurrentIndex();
+    currentIndex--;
+
+    if(currentIndex >= 0) {      
+      const currentImage = imageListId[currentIndex];
+      setShowImageViewer({ selectedImage: currentImage, show: true });
+    }   
+  }
+
   return (
     <div className="overlay">
       <div className="row">
         <div className="column-50px">
           <ul>
             <li>
-              <button>B</button>
+              <button className="btn btn-dark btn-sm" onClick={onNext}>Next</button>
             </li>
             <li>
-              <button>F</button>
+              <button className="btn btn-dark btn-sm" onClick={onPrevious}>Previous</button>
             </li>
             <li>
               <button>S</button>

@@ -8,8 +8,8 @@ class InstagramSession extends baseService {
     super();
     this.component = "instagramSession.js";
     this.owner = owner;
-    this.user = "dev_ig_01";
-    this.password = "er!Emg24$ZFj";
+    this.user = "Igloo001209";
+    this.password = "2547y7n704";
     this.session = new Session(owner);
   }
 

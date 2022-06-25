@@ -19,7 +19,7 @@ class modelService extends baseService {
   }
 
   async getModelByPage(page, pageSize) {
-    let models = await Model.find({})
+    let models = await Model.find({owner: this.owner})
       .sort({ username: "asc" })
       .skip(page * pageSize)
       .limit(pageSize)
@@ -36,8 +36,8 @@ class modelService extends baseService {
     return modelThumb64;
   }
 
-  async getImagesByPage({username, page, pageSize }) {
-    let models = await Image.find({username: username, owner: this.owner})
+  async getImagesByPage({ username, page, pageSize }) {
+    let models = await Image.find({ username: username, owner: this.owner })
       .sort({ username: "asc" })
       .skip(page * pageSize)
       .limit(pageSize)
@@ -52,6 +52,12 @@ class modelService extends baseService {
     });
 
     return modelThumb64;
+  }
+
+  async getPages({ pageSize }) {
+    const modelCount = await Model.find({ owner: this.owner });
+    const pages = Math.ceil(modelCount.length / pageSize);
+    return pages;
   }
 
   async exists(userName) {

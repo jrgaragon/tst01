@@ -30,6 +30,12 @@ class imageService extends baseService {
     return imagesThumb64;
   }
 
+  async getPages({ username, pageSize }) {
+    const imageCount = await Image.find({ username: username, owner: this.owner });
+    const pages = Math.ceil(imageCount.length / pageSize);
+    return pages;
+  }
+
   async getImagesById(id) {
     let image = await Image.findOne({ id: id, owner: this.owner }).lean();
 

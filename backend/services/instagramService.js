@@ -53,17 +53,18 @@ class instagramService extends baseService {
         username: img.username,
         thumbnail: img.thumbnail,
         publishedCount: 0,
-        type: "model",        
+        type: "model",
         owner: this.owner,
       });
     }
   }
 
   async saveImage(image) {
-    if (!(await Image.exists({ pk: image.pk, owner: this.owner }))) {
+    if (!(await Image.findOne({ id: image.id, owner: this.owner }))) {
       const imagedb = new Image(image);
       await imagedb.save();
     } else {
+      console.log(`Duplicate Values ${{ id: image.id, owner: this.owner }}`);
       this.duplicate = true;
     }
   }
